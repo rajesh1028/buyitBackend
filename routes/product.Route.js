@@ -9,6 +9,12 @@ productRouter.get("/", async (req, res) => {
     res.send(data);
 })
 
+productRouter.get("/:id", async (req, res) => {
+    const _id = req.params.id
+    const data = await ProductModel.find({_id});
+    res.send(data);
+})
+
 productRouter.post("/add", async (req, res) => {
     const { title, price, desc, img } = req.body
 

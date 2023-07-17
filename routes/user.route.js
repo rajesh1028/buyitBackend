@@ -7,7 +7,7 @@ require("dotenv").config();
 const userRouter = express.Router();
 userRouter.use(express.json());
 
-userRouter.get("/", async(req,res)=>{
+userRouter.get("/", async (req, res) => {
     try {
         let user = await UserModel.find();
         res.send(user);
@@ -27,9 +27,7 @@ userRouter.post("/register", async (req, res) => {
             } else {
                 const user = new UserModel({ email, password: secure_pwd, name });
                 await user.save()
-
-                let userData = await UserModel.find();
-                res.send(userData);
+                res.send({ "msg": "Registered Successfully", user });
             }
         })
 
@@ -47,7 +45,7 @@ userRouter.post("/login", async (req, res) => {
         if (user.length > 0) {
             bcrypt.compare(password, hashed_pwd, (err, result) => {
                 if (result) {
-                    const token = jwt.sign({ userID:user[0]._id }, process.env.key, {expiresIn:'2h'})
+                    const token = jwt.sign({ userID: user[0]._id }, process.env.key, { expiresIn: '2h' })
                     res.send({ "msg": "Login Successful", "token": token });
                 } else {
                     res.send("Wrong credentials");

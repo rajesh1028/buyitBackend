@@ -10,6 +10,12 @@ cartRouter.get("/", async (req, res) => {
     res.send(data);
 })
 
+cartRouter.get("/:id", async (req, res) => {
+    const id = req.params.id;
+    const data = await CartModel.find({ "_id": id });
+    res.send(data);
+})
+
 cartRouter.post("/add", async (req, res) => {
     const { user, products } = req.body
     try {

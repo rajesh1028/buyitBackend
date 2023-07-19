@@ -51,7 +51,7 @@ cartRouter.patch("/update/:user_id", async (req, res) => {
         }
         console.log(payload);
         await CartModel.findByIdAndUpdate({ "_id": data[0]._id }, payload);
-        res.status(200).send({"msg":"cart updated successfully"});
+        res.status(200).json({"msg":"cart updated successfully"});
     } catch (error) {
         console.log(error)
         res.send("Error updating")

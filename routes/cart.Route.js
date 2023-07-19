@@ -36,12 +36,22 @@ cartRouter.post("/add", async (req, res) => {
     }
 })
 
-cartRouter.patch("/update/:id", async (req, res) => {
-    const obj = req.body
-    const id = req.params.id
+cartRouter.patch("/update/:user_id", async (req, res) => {
+    const { product } = req.body;
+    const user_id = req.params.user_id;
     try {
-        await CartModel.findByIdAndUpdate({ "_id": id }, obj);
-        res.send("Updated successfully");
+        const data = await CartModel.find({ user: user_id });
+        const products = data[0].products.filter((item) => {
+            return item != product;
+        });
+        // console.log(data);
+        const payload = {
+            ...data[0]._doc,
+            products
+        }
+        console.log(payload);
+        await CartModel.findByIdAndUpdate({ "_id": data[0]._id }, payload);
+        res.send("cart updated successfully");
     } catch (error) {
         console.log(error)
         res.send("Error updating")

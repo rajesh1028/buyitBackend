@@ -12,7 +12,7 @@ cartRouter.get("/", async (req, res) => {
 
 cartRouter.get("/:id", async (req, res) => {
     const id = req.params.id;
-    const data = await CartModel.find({ "_id": id });
+    const data = await CartModel.find({ user: id });
     res.send(data);
 })
 

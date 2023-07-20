@@ -10,10 +10,10 @@ const authenticate = (req, res, next) => {
             req.body.userID = userID;
             next();
         } else {
-            res.status(400).json({ "msg": "Please login first" });
+            res.status(401).json({ "msg": "Please login first" });
         }
     } else {
-        res.status(400).json({ "msg": "Please login first" });
+        res.status(401).json({ "msg": "Please login first" });
     }
 }
 

@@ -10,10 +10,10 @@ userRouter.use(express.json());
 userRouter.get("/", async (req, res) => {
     try {
         let user = await UserModel.find();
-        res.send(user);
+        res.status(200).json({ user });
     } catch (error) {
         console.log(error);
-        res.send(error);
+        res.status(400).json({ error });
     }
 })
 
@@ -27,13 +27,13 @@ userRouter.post("/register", async (req, res) => {
             } else {
                 const user = new UserModel({ email, password: secure_pwd, name });
                 await user.save()
-                res.send({ "msg": "Registered Successfully", user });
+                res.status(200).json({ "msg": "Registered Successfully", user });
             }
         })
 
     } catch (error) {
         console.log(error);
-        res.send("Error in registering");
+        res.status(400).json({ "msg": "Error in registering" });
     }
 })
 
@@ -46,17 +46,17 @@ userRouter.post("/login", async (req, res) => {
             bcrypt.compare(password, hashed_pwd, (err, result) => {
                 if (result) {
                     const token = jwt.sign({ userID: user[0]._id }, process.env.key, { expiresIn: '4h' })
-                    res.send({ "msg": "Login Successful", "token": token, userID: user[0]._id });
+                    res.status(200).json({ "msg": "Login Successful", "token": token, userID: user[0]._id });
                 } else {
-                    res.send("Wrong credentials");
+                    res.status(400).json({ "msg": "Wrong credentials" });
                 }
             })
         } else {
-            res.send("Wrong credentials");
+            res.status(400).json({ "msg": "Wrong credentials" });
         }
     } catch (error) {
         console.log(error)
-        res.send("Error in login in")
+        res.status(400).json({ "msg": "Error in login in" });
     }
 })
 

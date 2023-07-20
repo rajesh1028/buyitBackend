@@ -6,14 +6,24 @@ cartRouter.use(express.json());
 
 cartRouter.get("/", async (req, res) => {
     const query = req.query
-    const data = await CartModel.find(query);
-    res.send(data);
+    try {
+        const data = await CartModel.find(query);
+        res.status(200).json({ data });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error});
+    }
 })
 
 cartRouter.get("/:id", async (req, res) => {
     const id = req.params.id;
-    const data = await CartModel.find({ user: id });
-    res.send(data);
+    try {
+        const data = await CartModel.find({ user: id });
+        res.status(200).json({ data });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error});
+    }
 })
 
 cartRouter.post("/add", async (req, res) => {
@@ -32,7 +42,7 @@ cartRouter.post("/add", async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        res.send("Error in adding items to cart");
+        res.status(400).json({ "msg": "Error in adding items to cart" });
     }
 })
 
@@ -54,7 +64,7 @@ cartRouter.patch("/update/:user_id", async (req, res) => {
         res.status(200).json({ "msg": "cart updated successfully" });
     } catch (error) {
         console.log(error)
-        res.send("Error updating")
+        res.status(400).json({ "msg": "Error updating" })
     }
 })
 
@@ -62,10 +72,10 @@ cartRouter.delete("/delete/:id", async (req, res) => {
     const id = req.params.id
     try {
         await CartModel.findByIdAndDelete({ "_id": id });
-        res.send("Deleted successfully");
+        res.status(200).json({ "msg": "Deleted successfully" });
     } catch (error) {
         console.log(error)
-        res.send("Error deleting")
+        res.status(400).json({ "msg": "Error deleting" })
     }
 })
 

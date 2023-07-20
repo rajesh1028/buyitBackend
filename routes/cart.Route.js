@@ -23,7 +23,7 @@ cartRouter.post("/add", async (req, res) => {
         let patch_items = [...items[0].products, ...products];
         if (items.length) {
             await CartModel.findByIdAndUpdate({ "_id": items[0]._id }, { products: patch_items });
-            res.send("Items added to cart");
+            res.status(200).json({ "msg": "Items added to cart" });
         } else {
             const cart = new CartModel({ user, products });
             await cart.save();
@@ -51,7 +51,7 @@ cartRouter.patch("/update/:user_id", async (req, res) => {
         }
         console.log(payload);
         await CartModel.findByIdAndUpdate({ "_id": data[0]._id }, payload);
-        res.status(200).json({"msg":"cart updated successfully"});
+        res.status(200).json({ "msg": "cart updated successfully" });
     } catch (error) {
         console.log(error)
         res.send("Error updating")

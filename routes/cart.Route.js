@@ -27,7 +27,7 @@ cartRouter.post("/add", async (req, res) => {
         } else {
             const cart = new CartModel({ user, products });
             await cart.save();
-            res.send("Added to cart");
+            res.status(200).json({ "msg": "Added to cart" });
         }
 
     } catch (error) {

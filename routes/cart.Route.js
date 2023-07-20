@@ -11,7 +11,7 @@ cartRouter.get("/", async (req, res) => {
         res.status(200).json({ data });
     } catch (error) {
         console.log(error);
-        res.status(400).json({error});
+        res.status(400).json({ error });
     }
 })
 
@@ -22,23 +22,24 @@ cartRouter.get("/:id", async (req, res) => {
         res.status(200).json({ data });
     } catch (error) {
         console.log(error);
-        res.status(400).json({error});
+        res.status(400).json({ error });
     }
 })
 
 cartRouter.post("/add", async (req, res) => {
     const { user, products } = req.body
     try {
-        const items = await CartModel.find({ user });
-        let patch_items = [...items[0].products, ...products];
-        if (items.length) {
-            await CartModel.findByIdAndUpdate({ "_id": items[0]._id }, { products: patch_items });
+        const items = await CartModel.findOne({ user });
+        if (items) {
+            let patch_items = [...items.products, ...products];
+            await CartModel.findByIdAndUpdate({ "_id": items._id }, { products: patch_items });
             res.status(200).json({ "msg": "Items added to cart" });
         } else {
             const cart = new CartModel({ user, products });
             await cart.save();
             res.status(200).json({ "msg": "Added to cart" });
         }
+        res.send("data");
 
     } catch (error) {
         console.log(error);
